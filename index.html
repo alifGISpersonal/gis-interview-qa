@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoCoLab - Q&A Repo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #FFEFBA;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #FFFFFF, #FFEFBA);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    min-height: 100vh;
+    padding: 10px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: clamp(1.5em, 5vw, 2.5em);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.header p {
+    font-size: clamp(0.9em, 3vw, 1.2em);
+    opacity: 0.9;
+}
+
+.action-section {
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    text-align: center;
+    min-width: 80px;
+}
+
+.stat-number {
+    font-size: clamp(1.5em, 4vw, 2em);
+    font-weight: 700;
+    color: #667eea;
+    display: block;
+}
+
+.stat-label {
+    font-size: clamp(0.75em, 2vw, 0.9em);
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    border: none;
+    padding: 10px 20px;
+    font-size: clamp(0.85em, 2vw, 1em);
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+.btn-success {
+    background: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+.content {
+    padding: 20px;
+}
+
+.tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tab {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: clamp(0.9em, 2.5vw, 1.1em);
+    font-weight: 600;
+    color: #6c757d;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tab:hover {
+    color: #667eea;
+    background: #f8f9fa;
+}
+
+.tab.active {
+    color: #667eea;
+    background: #f8f9fa;
+    border-bottom: 3px solid #667eea;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 20px 12px 45px;
+    border: 2px solid #e9ecef;
+    border-radius: 50px;
+    font-size: clamp(0.9em, 2vw, 1em);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 1.2em;
+}
+
+.category-filter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    padding: 8px 16px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: clamp(0.8em, 2vw, 0.95em);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.category-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.category-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+}
+
+.form-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: clamp(0.9em, 2vw, 1em);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: clamp(0.9em, 2vw, 1em);
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.tag-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    min-height: 50px;
+}
+
+.tag-input-container:focus-within {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.tag {
+    background: #667eea;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: clamp(0.8em, 2vw, 0.9em);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag-remove {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    line-height: 1;
+}
+
+.tag-remove:hover {
+    color: #ffd700;
+}
+
+.tag-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 6px;
+    min-width: 120px;
+    font-size: clamp(0.9em, 2vw, 1em);
+}
+
+.qa-item {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.qa-item:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.qa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.question {
+    font-size: clamp(1em, 2.5vw, 1.1em);
+    font-weight: 600;
+    color: #2d3748;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    word-break: break-word;
+}
+
+.q-number {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: clamp(0.75em, 2vw, 0.85em);
+    min-width: 35px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.qa-actions {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.qa-actions button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 1.2em;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.qa-actions button:hover {
+    background: #e9ecef;
+    transform: scale(1.1);
+}
+
+.answer {
+    color: #4a5568;
+    line-height: 1.6;
+    padding-left: 45px;
+    margin-bottom: 10px;
+    font-size: clamp(0.9em, 2vw, 1em);
+    word-break: break-word;
+}
+
+.qa-tags {
+    padding-left: 45px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.qa-tag {
+    background: #e0e7ff;
+    color: #5b21b6;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: clamp(0.75em, 2vw, 0.85em);
+}
+
+.success-message {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+    font-size: clamp(0.9em, 2vw, 1em);
+}
+
+.success-message.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+/* Go to Top Button */
+.go-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+.go-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.go-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.go-to-top:active {
+    transform: translateY(-2px);
+}
+
+.go-to-top::before {
+    content: '↑';
+    font-weight: bold;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        border-radius: 10px;
+    }
+
+    .header {
+        padding: 20px 15px;
+    }
+
+    .action-section {
+        padding: 15px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stats {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .action-buttons .btn {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .tabs {
+        gap: 3px;
+    }
+
+    .tab {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .filter-section {
+        flex-direction: column;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .category-filter {
+        justify-content: center;
+    }
+
+    .form-section {
+        padding: 15px;
+    }
+
+    .answer {
+        padding-left: 0;
+        margin-top: 10px;
+    }
+
+    .qa-tags {
+        padding-left: 0;
+        margin-top: 10px;
+    }
+
+    .question {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .qa-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .qa-actions {
+        align-self: flex-end;
+    }
+
+    .go-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3em;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        margin: 10px;
+    }
+
+    .content {
+        padding: 25px;
+    }
+
+    .action-section {
+        padding: 25px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.5em;
+    }
+
+    .header p {
+        font-size: 0.9em;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.85em;
+    }
+
+    .qa-item {
+        padding: 12px;
+    }
+
+    .stat-number {
+        font-size: 1.5em;
+    }
+
+    .stat-label {
+        font-size: 0.75em;
+    }
+
+    .category-btn {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+
+    .go-to-top {
+        bottom: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .action-section,
+    .filter-section,
+    .tabs,
+    .qa-actions,
+    .go-to-top {
+        display: none !important;
+    }
+
+    .container {
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .qa-item {
+        page-break-inside: avoid;
+        border: 1px solid #e9ecef;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    .category-btn,
+    .tab {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qa-actions button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .go-to-top {
+        width: 55px;
+        height: 55px;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .btn-primary,
+    .category-btn.active,
+    .go-to-top {
+        border: 2px solid #000;
+    }
+
+    .qa-item {
+        border: 2px solid #000;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .go-to-top {
+        transition: opacity 0.01ms, visibility 0.01ms;
+    }
+
+    .go-to-top:hover {
+        transform: none;
+    }
+}
+
+/* Dark scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GeoCoLab</h1>
+            <p> A growing repository of GIS interview questions and answers designed for candidates, hiring teams, and professionals looking to deepen their knowledge. This platform brings together practical, real-world questions that reflect the skills and concepts used across the geospatial industry. Browse curated topics, study reliable explanations, and contribute your own questions to help expand a shared resource for the entire GIS community.</p>
+        </div>
+        
+        <div class="action-section">
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number" id="totalQA">0</span>
+                    <span class="stat-label">Questions</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="totalTags">0</span>
+                    <span class="stat-label">Tags</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="exportData()">💾 Export</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📂 Import</button>
+                <button class="btn btn-primary" onclick="generatePDF()">📥 PDF</button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('browse')">Browse</button>
+                <button class="tab" onclick="switchTab('add')">Add Question</button>
+            </div>
+            
+            <div id="browseTab" class="tab-content active">
+                <div class="filter-section">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterContent()">
+                    </div>
+                </div>
+                
+                <div class="category-filter">
+                    <button class="category-btn active" onclick="filterCategory('all')">All</button>
+                    <button class="category-btn" onclick="filterCategory('arcsde')">ArcSDE</button>
+                    <button class="category-btn" onclick="filterCategory('arcpy')">ArcPy</button>
+                    <button class="category-btn" onclick="filterCategory('python')">Python</button>
+                    <button class="category-btn" onclick="filterCategory('sql')">SQL</button>
+                </div>
+                
+                <div id="contentArea"></div>
+            </div>
+            
+            <div id="addTab" class="tab-content">
+                <div class="form-section">
+                    <div class="success-message" id="successMessage">Question added!</div>
+                    
+                    <form onsubmit="addQuestion(event)">
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="questionCategory" required>
+                                <option value="">Select category</option>
+                                <option value="ArcSDE & Enterprise Geodatabase">ArcSDE & Geodatabase</option>
+                                <option value="ArcPy Automation & Geoprocessing">ArcPy Automation</option>
+                                <option value="Python Programming">Python Programming</option>
+                                <option value="SQL & Spatial SQL">SQL & Spatial SQL</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Question *</label>
+                            <input type="text" id="questionText" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Answer *</label>
+                            <textarea id="answerText" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Tags (press Enter)</label>
+                            <div class="tag-input-container" id="tagContainer">
+                                <input type="text" class="tag-input" id="tagInput" onkeydown="handleTagInput(event)">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success">Add Question</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="importData(event)">
+    <button class="go-to-top" onclick="scrollToTop()" aria-label="Go to top"></button>
+    <script>
+        let qaData = {
+            "ArcSDE & Enterprise Geodatabase": [
+                { q: "What is ArcSDE and what role does it serve?", a: "ArcSDE (Spatial Database Engine) is a gateway that enables ArcGIS to store and manage spatial data in relational database management systems (RDBMS). It acts as middleware between ArcGIS applications and enterprise databases like SQL Server, Oracle, or PostgreSQL, providing efficient storage, retrieval, and management of geographic data." },
+                { q: "What is versioning in an enterprise geodatabase?", a: "Versioning is a mechanism that allows multiple users to edit the same data simultaneously without applying locks or duplicating data. It maintains a record of changes through delta tables (A and D tables) and allows editors to work in isolation before reconciling and posting changes to the default version." },
+                { q: "Explain the difference between the A and D delta tables.", a: "The A (Adds) table stores all inserted features and the current state of modified features. The D (Deletes) table stores the original state of modified features and records of deleted features. Together they track all changes made in a version relative to its parent." },
+                { q: "What is the DEFAULT version in a versioned geodatabase?", a: "The DEFAULT version is the root version that all other versions stem from. It represents the published or production state of the data. Users typically create child versions from DEFAULT to make edits, then reconcile and post changes back to DEFAULT after review." },
+                { q: "What are the three versioning access levels?", a: "Public: Anyone can view and edit; Protected: Anyone can view, only owner and DBA can edit; Private: Only owner and DBA can view and edit. These control who can see and modify a particular version." },
+                { q: "What is the state tree in versioned editing?", a: "The state tree is a hierarchy of states that tracks the lineage and relationships between versions. Each state represents a snapshot of the database at a point in time. The state tree enables version reconciliation by tracking which edits occurred in which branches." },
+                { q: "What does 'reconcile' mean in versioning?", a: "Reconciling is the process of updating a child version with changes from its parent version. It merges parent edits into the child version and identifies conflicts where the same features were modified in both versions." },
+                { q: "What does 'post' mean in versioning?", a: "Posting applies changes from a child version back to its parent version. After reconciling conflicts, posting makes the child version's edits permanent in the parent, typically moving edits from a working version to DEFAULT." },
+                { q: "What are version conflicts and how are they resolved?", a: "Conflicts occur when the same feature is modified in both parent and child versions. Resolution options include: keeping the child version's edit, accepting the parent version's edit, or manually merging attributes. Conflicts must be resolved before posting." },
+                { q: "What is the difference between versioned and non-versioned editing?", a: "Versioned editing uses delta tables to track changes and enables multi-user editing without locks. Non-versioned editing directly modifies the base table and uses database locks, suitable for single-editor workflows or when versioning overhead isn't needed." },
+                { q: "What is geodatabase replication?", a: "Replication creates and synchronizes copies of geodatabase data across multiple geodatabases. It enables distributed editing, data distribution to field offices, and offline workflows. Changes made in replicas can be synchronized back to the parent geodatabase." },
+                { q: "What are the main types of geodatabase replication?", a: "One-way replication: Parent sends changes to child only; Two-way replication: Both parent and child can send changes to each other; Check-out/check-in: Temporary replica for offline editing that is checked back in and removed after synchronization." },
+                { q: "What is the difference between one-way and two-way replication?", a: "One-way replication allows changes to flow in one direction only (typically parent to child), useful for data distribution. Two-way replication allows bidirectional synchronization, enabling distributed editing where multiple sites can modify data and sync changes." },
+                { q: "What is a replica version?", a: "A replica version is the specific version in a versioned geodatabase that participates in replication. Changes synchronized during replication are applied to this version. The replica version can be reconciled and posted like any other version." },
+                { q: "What is check-out/check-in replication used for?", a: "Check-out/check-in replication is designed for disconnected editing scenarios. A user checks out data to a local geodatabase, makes edits offline, then checks the data back in. The replica is temporary and removed after check-in, making it ideal for field work." },
+                { q: "What are replica filters?", a: "Replica filters define which features participate in replication using SQL queries or spatial extents. They limit replication to specific subsets of data, reducing synchronization time and storage requirements while ensuring field workers only receive relevant data." },
+                { q: "What is synchronization in replication?", a: "Synchronization is the process of exchanging changes between replicas. During sync, delta messages containing edits are sent between parent and child geodatabases, updating both to reflect changes made since the last synchronization." },
+                { q: "What are delta files in replication?", a: "Delta files are XML files containing changes (inserts, updates, deletes) exported from one replica to be imported into another. They are the transport mechanism for synchronization when replicas cannot connect directly to each other's geodatabases." },
+                { q: "What is the state ID (SDE_STATE_ID) column?", a: "SDE_STATE_ID is a system column in versioned feature classes that identifies which state (version) a row belongs to. It is the key linking rows in business tables to the state tree, enabling version isolation and tracking of edits across versions." },
+                { q: "What happens to the state tree during compress?", a: "Compress removes unnecessary states from the state tree by moving edits from delta tables to the base table. It consolidates states that have no child versions dependent on them, reducing the state tree size and improving query performance." },
+                { q: "Why is regular compression important?", a: "Regular compression prevents state tree bloat, which degrades performance. Without compression, the state tree grows indefinitely as edits accumulate in delta tables. Compression moves completed edits to base tables and prunes unused states, maintaining system performance." },
+                { q: "What is the base table in a versioned feature class?", a: "The base table stores features that are common across all versions (typically DEFAULT version features). In multi-versioned views, the base table is joined with delta tables (A and D) to construct the view of features for a specific version." },
+                { q: "What are business tables vs. system tables in geodatabases?", a: "Business tables store the actual feature geometry and attributes (e.g., parcels, roads). System tables store geodatabase metadata, versioning information, relationships, domains, and configuration (tables prefixed with SDE_ or GDB_)." },
+                { q: "What is a multi-versioned view?", a: "A multi-versioned view is a database view that combines the base table with A and D delta tables to present the state of features for a specific version. It dynamically constructs the version-specific view of data without duplicating features." },
+                { q: "What is an edit version and when is it used?", a: "An edit version is a child version created specifically for making edits, isolating changes from the DEFAULT version. It allows QA/QC review before changes are posted to production. Common in workflows requiring approval before publishing edits." },
+                { q: "What happens during a reconcile operation at the database level?", a: "During reconcile, the database compares the state IDs of the child version and parent version. It identifies conflicting edits (same OBJECTID modified in both), merges non-conflicting changes from parent into child, and flags conflicts for user resolution." },
+                { q: "What is the difference between traditional and branch versioning?", a: "Traditional versioning uses delta tables (A/D tables) and a state tree. Branch versioning (introduced in ArcGIS Pro) uses a simplified architecture without delta tables, storing edits in the base table with system-managed fields, improving performance for many workflows." },
+                { q: "What are the performance implications of deep version trees?", a: "Deep version trees (many levels of parent-child relationships) slow queries because the database must traverse more delta tables to reconstruct feature views. They also make reconcile/post operations slower. Keeping version hierarchies shallow improves performance." },
+                { q: "What is archiving in a geodatabase?", a: "Archiving maintains a historical record of all changes to features over time. An archive class stores retired features with timestamps. Archiving can be enabled on versioned or non-versioned data, allowing temporal queries to view data as it existed at specific dates." },
+                { q: "Can you mix versioned and non-versioned data in the same geodatabase?", a: "Yes, you can have both versioned and non-versioned feature classes in the same geodatabase. This is common when some datasets require multi-user editing (versioned) while others are read-only or single-editor (non-versioned), reducing system overhead." },
+                { q: "What is a version lock and when does it occur?", a: "A version lock occurs during reconcile/post operations to prevent other users from editing that version simultaneously. Locks ensure data consistency during version operations but can block other editors, so these operations should be performed during low-usage periods." },
+                { q: "What is the SDE_versions table?", a: "The SDE_versions table is a system table that stores metadata about all versions in the geodatabase: version name, owner, parent version, creation date, and access level. It is queried to display version hierarchies and manage version properties." },
+                { q: "What is the SDE_states table?", a: "The SDE_states table tracks all states in the state tree, storing state IDs, parent state IDs, and timestamps. It is central to version management, enabling the database to construct version lineages and determine which rows belong to which versions." },
+                { q: "What are the storage implications of versioning?", a: "Versioning requires additional storage for delta tables (A and D), system tables, and indexes. Storage can grow significantly if compression is not performed regularly. The overhead typically ranges from 30-100% additional storage compared to non-versioned data." },
+                { q: "What is a historical marker in versioned geodatabases?", a: "A historical marker represents a named point in the version lineage, allowing users to access data as it existed at that moment. Historical markers enable temporal queries and long-term archive of specific data states without maintaining active versions." },
+                { q: "How do you convert non-versioned data to versioned?", a: "Use the Register as Versioned tool in ArcGIS. This creates A and D delta tables, adds system columns (SDE_STATE_ID), creates multi-versioned views, and updates geodatabase metadata. The operation requires exclusive access to the feature class." },
+                { q: "What is the difference between editor tracking and archiving?", a: "Editor tracking stores who edited features and when in attribute fields (created_user, created_date, last_edited_user, last_edited_date) but does not preserve historical states. Archiving stores complete copies of features as they existed before edits, enabling full temporal reconstruction." },
+                { q: "What are the advantages of non-versioned editing?", a: "Non-versioned editing has lower overhead (no delta tables), simpler database structure, faster queries, and reduced storage requirements. It is ideal for single-editor scenarios, data loading operations, or when version isolation is not needed." },
+                { q: "What is a version conflict class?", a: "A conflict class is a temporary feature class created during reconcile that stores features with conflicts between parent and child versions. Users can view this class to understand conflicts spatially and make informed decisions about conflict resolution." },
+                { q: "What happens to related data during reconcile/post?", a: "Related data in relationship classes follows the primary feature. If a feature is updated during reconcile/post, related records move with it. Relationship class rules (cascade delete, restrict) are enforced during these operations to maintain referential integrity." },
+                { q: "What is the purpose of the analyze tool for versioned data?", a: "The Analyze tool updates database statistics for versioned feature classes, helping the RDBMS query optimizer choose efficient execution plans. It should be run after compression or major edits to maintain optimal query performance on delta tables and indexes." },
+                { q: "Can you replicate non-versioned data?", a: "Yes, but functionality is limited. One-way and check-out replication support non-versioned data. Two-way replication requires versioned data because it needs version isolation to track and merge changes from multiple sources without conflicts." },
+                { q: "What is geodatabase compression and when should it run?", a: "Compression consolidates the state tree by moving edits from delta tables to base tables and removing unused states. It should run regularly (daily or weekly) during maintenance windows when no editing occurs. Compression improves performance and reclaims storage space." },
+                { q: "What are connected vs. disconnected replicas?", a: "Connected replicas can synchronize directly through a database connection. Disconnected replicas use delta files (.xml) to exchange changes, suitable for environments without network connectivity between geodatabases or when firewalls prevent direct database connections." },
+                { q: "What is the role of OBJECTID in versioning?", a: "OBJECTID is the unique identifier for features across all versions. Combined with SDE_STATE_ID, it determines which version of a feature is visible in each version. A single OBJECTID may exist in multiple states with different geometries or attributes." },
+                { q: "What are the conflict detection options in reconcile?", a: "By object: Conflicts detected if any attribute of the same feature changed; By attribute: Conflicts only if the same attribute of the same feature changed; By geometry: Conflicts only if the geometry changed. More granular options reduce unnecessary conflicts." },
+                { q: "What is a save point in a version?", a: "A save point captures the current state of a version without posting to the parent. It is a checkpoint that allows rollback to a known good state during long editing sessions. Save points are useful for incremental saves without committing to DEFAULT." },
+                { q: "How do domains and subtypes work with versioning?", a: "Domains and subtypes are geodatabase-level properties that apply across all versions. Changes to domains or subtypes affect all versions immediately. Domain validation occurs during edits in each version, ensuring data integrity regardless of version isolation." },
+                { q: "What is the impact of versioning on spatial indexes?", a: "Versioned data has spatial indexes on base, A, and D tables. Queries must check all three tables, which can slow spatial operations. Regular compression moves data to base tables, allowing better index utilization. Analyze updates index statistics for optimal performance." },
+                { q: "Can you version relationship classes?", a: "Relationship classes themselves are not versioned, but if participating feature classes are versioned, the relationships are tracked through versions. This means related records follow their parent features through the version tree, maintaining referential integrity across versions." },
+                { q: "What is geodatabase topology and how does it interact with versioning?", a: "Topology defines spatial relationship rules between features. In versioned editing, topology validation can occur per version. Errors found in one version do not appear in others. Topology must be validated before posting to ensure rule compliance in DEFAULT." },
+                { q: "What are geometric networks in enterprise geodatabases?", a: "Geometric networks model connectivity of linear features (pipes, roads) and enable network tracing. They can be versioned for multi-user editing. Network connectivity is maintained per version, allowing analysis of different network configurations in different versions." },
+                { q: "What is the difference between feature datasets and standalone feature classes?", a: "Feature datasets group feature classes that share the same spatial reference and can participate in topologies, networks, or terrain datasets. Standalone feature classes exist independently. Both can be versioned, but dataset-level operations affect all contained classes together." },
+                { q: "What are attachments and how do they work with versioning?", a: "Attachments are files (images, PDFs) linked to features through relationship classes. Attachment tables can be versioned, allowing different versions to have different files attached to the same feature. Attachments follow standard versioning and replication rules." },
+                { q: "What is the XML workspace document in geodatabases?", a: "XML workspace documents are XML schemas that define geodatabase structure: feature classes, fields, domains, relationships, and more. They are used to export/import schema or compare geodatabase designs. They do not include feature data, only metadata and structure definitions." },
+                { q: "How do you monitor versioning overhead?", a: "Monitor delta table sizes, state tree depth, number of versions, and time since last compression. Query system tables (SDE_states, SDE_versions) to track version counts. Database monitoring tools can track storage growth and query performance on versioned views." },
+                { q: "What is an unversioned edit session?", a: "An unversioned edit session directly modifies the base table without using delta tables or version isolation. It is used for non-versioned data or when exclusive access is available. Edits are immediately visible to all users and cannot be rolled back through versioning." },
+                { q: "What are geodatabase privileges and how do they relate to versioning?", a: "Privileges control user access to geodatabase objects (SELECT, INSERT, UPDATE, DELETE). For versioning, users need additional privileges to create versions, reconcile, and post. Database administrators grant these through GRANT statements or geodatabase administration tools." },
+                { q: "What is the SDE user in enterprise geodatabases?", a: "The SDE user is the geodatabase administrator account that owns system tables and core geodatabase functionality. In some databases (Oracle), it is a dedicated schema. In others (SQL Server), it is a user with dbo privileges who installed the geodatabase." },
+                { q: "What is the parent version in versioning?", a: "The parent version is the version from which a child version was created. Changes in the parent can be merged into the child during reconcile. The parent-child relationship defines the version hierarchy and determines how changes propagate through the state tree." },
+                { q: "What happens when you delete a version?", a: "Deleting a version removes its entry from SDE_versions but does not immediately free storage. Associated states remain until compression removes them. Child versions must be deleted first or reparented. Deleting a version with unposted edits loses those changes permanently." },
+                { q: "What is auto-reconcile in versioning?", a: "Auto-reconcile is an option during posting that automatically reconciles the version with its parent before posting. It simplifies workflows by combining two operations. If conflicts exist, the operation stops and requires manual conflict resolution before proceeding." },
+                { q: "What are version permissions?", a: "Version permissions control who can view, edit, reconcile, and post to specific versions. Permissions are set when creating versions (Public, Protected, Private) and can be modified by the version owner or geodatabase administrator. They enforce data governance and workflow control." },
+                { q: "What is a named version vs a temporary version?", a: "Named versions have explicit names, persist until deleted, and appear in version lists. Temporary versions are system-generated, used internally by applications, and are automatically cleaned up. Named versions support collaborative workflows; temporary versions support transient operations." },
+                { q: "What is the lineage of a version?", a: "Version lineage is the ancestry path from DEFAULT through all parent versions to the current version. It defines which states the version can access and determines conflict detection during reconcile. Lineage is visible in version tree diagrams and queried from SDE_versions." },
+                { q: "What is compress with analyze?", a: "Combining compress with analyze runs database statistics update after compression completes. This ensures the query optimizer has current information about data distribution after edits move from delta tables to base tables, maintaining optimal query performance." },
+                { q: "What are state lineage IDs?", a: "State lineage IDs uniquely identify the path through the state tree from the root state to a current state. They enable efficient determination of which rows are visible in a given version and which edits occurred in which version branches." },
+                { q: "What is the difference between compress and pack?", a: "Compress operates on versioned geodatabases to consolidate the state tree. Pack is unrelated to versioning; it compacts file geodatabases by removing unused space and defragmenting data. Both improve performance but address different storage mechanisms." },
+                { q: "What happens to indexes during compression?", a: "During compression, indexes on delta tables may be rebuilt or updated as data moves to base tables. The process can be I/O intensive. Proper index maintenance during compression ensures optimal query performance after the operation completes." },
+                { q: "What is a blocking version?", a: "A blocking version is one that prevents compression from removing certain states because the version still references them. Long-lived child versions with unposted edits can block state removal, causing state tree bloat and performance degradation over time." },
+                { q: "What are version ownership best practices?", a: "Assign versions to functional accounts or roles rather than individuals. Document version purposes and lifecycles. Delete unused versions promptly. Limit the number of concurrent versions. Establish naming conventions. Review version inventory regularly during maintenance." },
+                { q: "What is the SDE_row_locks table?", a: "SDE_row_locks tracks row-level locks in non-versioned editing scenarios. When users edit non-versioned data, locks are recorded here to prevent concurrent modifications. The table is empty in fully versioned environments where version isolation replaces locking." },
+                { q: "What is the difference between compress and rebuild indexes?", a: "Compress consolidates the state tree and moves data between tables. Rebuild indexes recreates index structures from scratch, removing fragmentation and updating statistics. Both improve performance but address different aspects: data organization vs. index efficiency." },
+                { q: "What are multigeneration versions?", a: "Multigeneration versions are child versions of child versions, creating deep hierarchies. While technically supported, they complicate management and slow reconcile operations. Best practice limits version depth to two or three generations for performance and simplicity." },
+                { q: "What is version reconciliation conflict logging?", a: "Conflict logging records which features had conflicts during reconcile, who resolved them, and what resolution was chosen. This audit trail supports quality control, troubleshooting, and understanding editing patterns in collaborative workflows." },
+                { q: "What happens when the state tree becomes corrupted?", a: "State tree corruption can cause query failures, reconcile errors, or data loss. Recovery involves restoring from backup, running database repair tools, or rebuilding affected feature classes. Prevention includes regular compression, monitoring, and avoiding abrupt database shutdowns." },
+                { q: "What is the SDE_table_registry table?", a: "SDE_table_registry catalogs all feature classes and tables in the geodatabase, storing registration IDs, table names, and configuration keywords. It maps user-visible dataset names to physical database tables and tracks whether datasets are versioned." },
+                { q: "What are configuration keywords in geodatabases?", a: "Configuration keywords define storage parameters for geodatabase objects: which tablespace to use, geometry storage format, indexing options. Keywords like DEFAULTS, GEOMETRY_STORAGE, and custom keywords control physical database storage characteristics." },
+                { q: "What is ST_Geometry storage?", a: "ST_Geometry is Esri's native spatial type for storing geometry in databases. It provides optimized spatial operations and integrates with SQL spatial functions. Alternative to database-native types (SDO_GEOMETRY in Oracle, GEOMETRY in PostGIS)." },
+                { q: "What is binary geometry storage?", a: "Binary geometry storage stores spatial data in database binary columns (BLOB) rather than using native spatial types. ArcSDE manages geometry encoding/decoding. Less efficient than spatial types but provides consistent behavior across database platforms." },
+                { q: "What are geometry storage configuration options?", a: "Options include ST_Geometry (Esri native), database native types (PostGIS GEOMETRY, Oracle SDO_GEOMETRY), and binary (BLOB). Choice affects performance, spatial SQL capabilities, and interoperability with non-Esri tools. Set via configuration keywords during creation." },
+                { q: "What is the SDE_geometry_columns table?", a: "SDE_geometry_columns stores metadata about spatial columns: geometry type (point/line/polygon), spatial reference, coordinate precision. It enables applications to understand spatial data structure without querying individual features." },
+                { q: "What is coordinate precision in geodatabases?", a: "Coordinate precision defines the number of decimal places stored for coordinates. Higher precision supports more accurate geometries but increases storage. Precision is set during feature class creation and cannot be changed without recreating the dataset." },
+                { q: "What are tolerance values in geodatabases?", a: "Tolerance values define the minimum distance distinguishing separate coordinates (XY tolerance) or elevations (Z tolerance). Features within tolerance are considered identical. Tolerance affects topology validation, snapping, and spatial relationships. Typically 0.001 meters or feet." },
+                { q: "What is the difference between XY tolerance and XY resolution?", a: "XY tolerance is the minimum distance between distinct coordinates (user-facing). XY resolution is the inverse of precision (internal storage). Resolution must be smaller than tolerance. Relationship: tolerance ≥ 3 × resolution for reliable spatial operations." },
+                { q: "What happens if tolerance is set too large?", a: "Excessive tolerance causes coordinates within tolerance to snap together, potentially distorting geometries or merging distinct features. It can hide small features, create topology errors, or produce unexpected spatial query results. Tolerance should match data accuracy requirements." },
+                { q: "What happens if tolerance is set too small?", a: "Very small tolerance requires high coordinate precision, increasing storage and processing time. It may expose coordinate noise or reveal unintended gaps in seemingly connected features. Balance tolerance against data source accuracy and use case requirements." },
+                { q: "What are M values in geodatabases?", a: "M values (measures) are numeric values stored with each vertex, independent of XYZ coordinates. Used for linear referencing: storing mile markers along routes, timestamps along GPS tracks, or other attributes at specific positions along linear features." },
+                { q: "What is Z-aware geometry?", a: "Z-aware geometries store elevation values for each vertex. Enables 3D analysis: calculating slope, volume, line-of-sight. Z values are optional; not all vertices require them. Essential for 3D modeling, terrain analysis, and vertical infrastructure management." },
+                { q: "What is the difference between 2D and 3D feature classes?", a: "2D feature classes store only XY coordinates. 3D (Z-enabled) feature classes store XYZ coordinates for each vertex. 3D classes support vertical analysis but require more storage. Choice is permanent after creation; conversion requires exporting/recreating features." },
+                { q: "What are spatial reference systems in geodatabases?", a: "Spatial reference systems define how coordinates map to Earth locations: projection (how 3D Earth projects to 2D), datum (Earth model), and units. All features in a feature class share the same spatial reference. Required for accurate spatial operations and integration." },
+                { q: "What is the well-known ID (WKID) in spatial references?", a: "WKID is a numeric identifier for standard spatial reference systems. Example: 4326 = WGS84 geographic, 3857 = Web Mercator. WKIDs enable unambiguous specification of coordinate systems and simplify spatial reference matching across datasets and applications." },
+                { q: "Can you change a feature class's spatial reference after creation?", a: "No, spatial reference is immutable after creation. To change it, use the Project tool to create a new feature class with the desired spatial reference. This reprojects all geometries to the new coordinate system while preserving feature attributes." },
+                { q: "What is the extent in geodatabases?", a: "Extent is the bounding rectangle encompassing all features in a feature class, defined by minimum and maximum XY coordinates. Stored in geodatabase metadata. Used for display optimization, spatial indexing, and quick spatial filtering before detailed geometry processing." },
+                { q: "What happens if a feature falls outside the defined extent?", a: "Features outside the initial extent are still stored and displayed correctly. The extent metadata becomes inaccurate but does not prevent data access. Recalculate extent using data management tools to update metadata and improve spatial index efficiency." },
+                { q: "What are spatial reference domains?", a: "Spatial reference domains define the valid coordinate ranges for a spatial reference system. They establish boundaries beyond which coordinates are invalid or cause calculation errors. Domains prevent impossible coordinates like longitude > 180° in geographic systems." },
+                { q: "What is the SDE_layers table?", a: "SDE_layers registers spatial layers in the geodatabase, storing layer IDs, minimum/maximum extents, spatial index information, and spatial reference details. It bridges geodatabase feature classes to their physical storage and enables spatial query optimization." },
+                { q: "What are spatial indexes and how do they work?", a: "Spatial indexes partition space into a grid or tree structure (R-tree, quadtree). Each geometry is associated with grid cells it overlaps. Queries first check the index to identify candidate features, then perform detailed geometry testing only on candidates, dramatically improving performance." },
+                { q: "What is an R-tree spatial index?", a: "R-tree is a hierarchical tree structure where each node contains minimum bounding rectangles (MBRs) covering child nodes. Spatial queries traverse the tree, pruning branches that do not intersect the query geometry. Highly efficient for range queries and nearest neighbor searches." },
+                { q: "What is a grid-based spatial index?", a: "Grid-based indexes divide space into uniform or multi-scale grid cells. Each feature is indexed by the cells it intersects. Queries identify features in relevant cells. Simple and effective but can suffer from features spanning many cells or uneven data distribution." },
+                { q: "When should you rebuild spatial indexes?", a: "Rebuild after major data changes (many inserts/updates/deletes), after compression in versioned environments, or when query performance degrades. Rebuilding removes fragmentation, updates statistics, and optimizes index structure for current data distribution." },
+                { q: "What are the symptoms of a poorly performing spatial index?", a: "Symptoms include slow spatial queries despite small result sets, queries ignoring indexes (visible in execution plans), or index size disproportionate to data size. Causes include outdated statistics, fragmented indexes, or inappropriate grid scale selection." },
+                { q: "What is the difference between attribute indexes and spatial indexes?", a: "Attribute indexes optimize searches on non-spatial columns using B-tree structures. Spatial indexes optimize geometric queries using specialized structures (R-tree). Both improve query performance but address different query types: WHERE clauses vs. spatial predicates." },
+                { q: "What are composite indexes?", a: "Composite indexes span multiple columns, optimizing queries filtering on those columns together. Example: index on (STATE, CITY) accelerates WHERE state='CA' AND city='Los Angeles'. Column order matters; leading column should be most selective or most frequently queried." }
+            ],
+            "ArcPy Automation & Geoprocessing": [
+    { "q": "What is ArcPy?", "a": "ArcPy is Python's site package for ArcGIS that provides access to geoprocessing tools, spatial analysis functions, and geodatabase management. It enables automation of GIS workflows, batch processing, and custom tool development for ArcGIS Desktop and ArcGIS Pro." },
+    { "q": "What is the difference between ArcPy and arcpy.mp?", "a": "ArcPy is the main module containing geoprocessing tools and functions. The arcpy.mp (ArcGIS Pro) or arcpy.mapping (ArcGIS Desktop) module specifically handles map document manipulation, layer management, and layout automation for cartographic workflows." },
+    { "q": "What is arcpy.da and what does it provide?", "a": "arcpy.da (Data Access module) provides high-performance cursors for reading, writing, and updating feature data. It includes SearchCursor, InsertCursor, UpdateCursor, Editor context manager, and database management functions, offering better performance than older cursor methods." },
+    { "q": "What is the difference between arcpy.da.SearchCursor and arcpy.SearchCursor?", "a": "arcpy.da.SearchCursor is significantly faster, returns tuples instead of row objects, uses simpler syntax, and supports context managers. The older arcpy.SearchCursor is slower, returns row objects requiring getValue(), and lacks context manager support." },
+    { "q": "How do you iterate through features using arcpy.da.SearchCursor?", "a": "Use: with arcpy.da.SearchCursor(fc, ['FIELD1', 'FIELD2']) as cursor: for row in cursor: process row[0], row[1]. The 'with' statement ensures proper cursor cleanup. Specify only needed fields for better performance." },
+    { "q": "What is the purpose of arcpy.da.UpdateCursor?", "a": "UpdateCursor allows reading and modifying feature attributes. Use cursor.updateRow(row) to save modifications or cursor.deleteRow() to delete a feature. It is essential for batch editing and geodatabase updates." },
+    { "q": "How do you add features using arcpy.da.InsertCursor?", "a": "Use: with arcpy.da.InsertCursor(fc, ['SHAPE@', 'FIELD1']) as cursor: cursor.insertRow([geometry, value]). Geometry objects are built using arcpy.Point, arcpy.Polyline, or arcpy.Polygon." },
+    { "q": "What are geometric tokens in ArcPy cursors?", "a": "Tokens like SHAPE@, SHAPE@XY, SHAPE@AREA, SHAPE@LENGTH, SHAPE@JSON, and SHAPE@WKT provide direct access to geometry properties and allow efficient interaction with spatial features." },
+    { "q": "What is the arcpy.da.Editor context manager?", "a": "Editor manages edit sessions for versioned and non-versioned feature classes. It wraps StartEditing, StartOperation, StopOperation, and StopEditing in a safe transaction management context." },
+    { "q": "How do you handle errors in ArcPy scripts?", "a": "Use try-except blocks. Catch arcpy.ExecuteError for geoprocessing problems. Use arcpy.GetMessages() to retrieve diagnostic details. Optionally use finally for cleanup." },
+
+    { "q": "What is a geoprocessing tool in ArcPy?", "a": "A geoprocessing tool performs spatial or data-processing operations such as Buffer, Clip, Intersect, Merge, and Dissolve. ArcPy provides programmatic access to all geoprocessing tools." },
+    { "q": "How do you list all feature classes in a workspace using ArcPy?", "a": "Set arcpy.env.workspace and use arcpy.ListFeatureClasses(). You can also filter by wildcard or feature type." },
+    { "q": "How do you set the workspace environment in ArcPy?", "a": "Use arcpy.env.workspace = 'path'. This tells ArcPy where to read and write input and output data by default." },
+    { "q": "What is the purpose of arcpy.env.overwriteOutput?", "a": "Setting overwriteOutput = True allows ArcPy to automatically overwrite existing datasets without raising errors." },
+    { "q": "What is a scratch workspace?", "a": "A location ArcPy uses to store temporary data. scratchGDB and scratchFolder automatically adjust based on environment settings." },
+    { "q": "How do you get a tool's messages after execution?", "a": "Use arcpy.GetMessages() or arcpy.GetMessages(2) for only error messages." },
+    { "q": "How do you check if a feature class exists?", "a": "Use arcpy.Exists(path) to validate that a dataset is present in the workspace." },
+    { "q": "What is arcpy.Describe used for?", "a": "Describe retrieves metadata about datasets, including spatial reference, shape type, fields, and extents." },
+    { "q": "How do you get a field list from a feature class?", "a": "Use arcpy.ListFields(fc) to retrieve Field objects with properties like name, type, and length." },
+    { "q": "What is the purpose of AddField?", "a": "Adds a new attribute field to a feature class or table. Requires field name, type, and optional length and alias." },
+
+    { "q": "What is a spatial reference in ArcPy?", "a": "A spatial reference defines coordinate system, projection, and datum. Use arcpy.SpatialReference() for creation." },
+    { "q": "How do you project a feature class using ArcPy?", "a": "Use arcpy.management.Project(in_fc, out_fc, spatial_ref)." },
+    { "q": "How do you define a projection?", "a": "Use arcpy.management.DefineProjection when a dataset lacks a spatial reference but coordinates are known." },
+    { "q": "What is arcpy.Geometry?", "a": "Geometry objects store shapes such as Point, Polyline, Polygon. They provide methods like buffer, intersect, and area." },
+    { "q": "How do you create a point geometry?", "a": "pt = arcpy.Point(x, y); pt_geom = arcpy.PointGeometry(pt)." },
+    { "q": "What is a geometry token SHAPE@XY used for?", "a": "It returns the feature’s centroid XY coordinate as a tuple for point-based access." },
+    { "q": "How do you merge multiple feature classes?", "a": "Use arcpy.management.Merge(in_features, out_feature_class)." },
+    { "q": "What is Dissolve used for?", "a": "Dissolve aggregates features based on shared attributes or dissolves all into one geometry." },
+    { "q": "How do you perform a spatial join in ArcPy?", "a": "Use arcpy.analysis.SpatialJoin(target, join, out_fc, join_operation, match_option)." },
+    { "q": "How do you clip a feature class?", "a": "Use arcpy.analysis.Clip(in_features, clip_features, out_features)." },
+
+    { "q": "What is buffering in ArcPy?", "a": "Buffer creates zones around features at a specified distance using arcpy.analysis.Buffer." },
+    { "q": "What is the difference between Buffer and MultipleRingBuffer?", "a": "Buffer creates one ring, MultipleRingBuffer creates multiple buffer rings at incremental distances." },
+    { "q": "What does arcpy.CheckOutExtension do?", "a": "It checks out licenses for extensions such as Spatial Analyst or 3D Analyst." },
+    { "q": "What does arcpy.CheckInExtension do?", "a": "Releases an extension license after use." },
+    { "q": "How do you run Spatial Analyst tools?", "a": "Import arcpy.sa and ensure the Spatial Analyst extension is available." },
+    { "q": "What is raster reclassification?", "a": "Changing raster cell values based on rules using Reclassify." },
+    { "q": "How do you convert raster to polygon?", "a": "Use arcpy.RasterToPolygon_conversion()." },
+    { "q": "How do you convert polygon to raster?", "a": "Use arcpy.PolygonToRaster_conversion()." },
+    { "q": "How do you mosaic rasters together?", "a": "Use arcpy.management.MosaicToNewRaster or Mosaic." },
+    { "q": "How do you clip raster data?", "a": "Use arcpy.management.Clip for raster operations." },
+
+    { "q": "What is ModelBuilder automation?", "a": "ModelBuilder automates GIS workflows visually and can be exported to Python for ArcPy scripting." },
+    { "q": "What is a toolbox (.tbx)?", "a": "A custom toolset that can contain ArcPy-based Python tools." },
+    { "q": "How do you create a custom ArcPy tool?", "a": "Use a Python script with a toolbox, define parameters, and interact with them using arcpy.GetParameter()." },
+    { "q": "What is arcpy.GetParameterAsText?", "a": "It retrieves input parameters as strings when running a script tool." },
+    { "q": "What is arcpy.AddMessage used for?", "a": "Displays messages in the Geoprocessing window when running script tools." },
+    { "q": "What is arcpy.AddError used for?", "a": "Displays an error message and flags tool execution failure." },
+    { "q": "How do you validate inputs in custom tools?", "a": "Use a tool validator class in the toolbox to control parameter interaction." },
+    { "q": "What is the purpose of arcpy.mapping in ArcMap?", "a": "Automates map documents, layers, symbology, and layout exports." },
+    { "q": "What is arcpy.mp used for in ArcGIS Pro?", "a": "Manages projects, maps, layers, layouts, and exports in ArcGIS Pro." },
+    { "q": "How do you export a map to PDF?", "a": "Use layout.exportToPDF('path.pdf') in arcpy.mp." },
+
+    { "q": "How do you change symbology with ArcPy?", "a": "Load a layer file (.lyrx), apply it to a layer using updateConnectionProperties." },
+    { "q": "What are layer properties in ArcPy?", "a": "Include visibility, definition queries, symbology, and data source paths." },
+    { "q": "What is updateConnectionProperties?", "a": "A function to fix or change broken data sources for layers and maps." },
+    { "q": "How do you automate map series creation?", "a": "Access layout.mapSeries and export pages via a loop." },
+    { "q": "What is a definition query?", "a": "SQL expression that filters features displayed in a layer." },
+    { "q": "What is arcpy.ListMaps?", "a": "Returns all maps inside an ArcGIS Pro project." },
+    { "q": "What is arcpy.ListLayers?", "a": "Returns all layers in a map or workspace." },
+    { "q": "How do you repair broken data sources?", "a": "Use updateConnectionProperties to replace incorrect paths." },
+    { "q": "What is the CIM?", "a": "Cartographic Information Model — JSON-like structure representing all map properties in ArcGIS Pro." },
+    { "q": "How do you access CIM properties?", "a": "Use layer.getDefinition() and layer.setDefinition()." },
+
+    { "q": "What is a geodatabase?", "a": "A container for datasets including feature classes, tables, rasters, and relationship classes." },
+    { "q": "How do you create a geodatabase?", "a": "Use arcpy.management.CreateFileGDB or CreateEnterpriseGDB." },
+    { "q": "How do you compact a file geodatabase?", "a": "Use arcpy.management.Compact()." },
+    { "q": "How do you create a feature dataset?", "a": "Use arcpy.management.CreateFeatureDataset()." },
+    { "q": "How do you register a feature class as versioned?", "a": "Use arcpy.RegisterAsVersioned_management." },
+    { "q": "What is reconcile and post?", "a": "Operations to merge edits from child versions into parent versions." },
+    { "q": "How do you compress a geodatabase?", "a": "Use arcpy.management.Compress on enterprise geodatabases." },
+    { "q": "How do you list domains?", "a": "Use arcpy.da.ListDomains(workspace)." },
+    { "q": "What are coded value domains?", "a": "Domains with predefined attribute values for fields." },
+    { "q": "How do you assign a domain to a field?", "a": "Use arcpy.management.AssignDomainToField()." },
+
+    { "q": "How do you run batch geoprocessing?", "a": "Use loops with ListFeatureClasses or ListRasters and execute tools inside loops." },
+    { "q": "What is parallel processing factor?", "a": "Environment setting controlling multi-core usage for tools that support parallelization." },
+    { "q": "What is a geoprocessing history?", "a": "Metadata tracking previous tool executions on datasets." },
+    { "q": "How do you delete intermediate data?", "a": "Use arcpy.management.Delete() or arcpy.env.scratchGDB." },
+    { "q": "What is arcpy.Exists used for?", "a": "Checks if a dataset or table exists before running operations." },
+    { "q": "What is arcpy.ValidateFieldName?", "a": "Ensures field names are valid for target workspace types." },
+    { "q": "What is the difference between Copy and CopyFeatures?", "a": "Copy handles any dataset type; CopyFeatures is specifically for feature classes." },
+    { "q": "How do you update geometry using UpdateCursor?", "a": "Assign a new geometry to row[0] using SHAPE@ and call updateRow." },
+    { "q": "What is arcpy.Geometry.projectAs?", "a": "Projects a geometry object to a new spatial reference without creating new feature classes." },
+    { "q": "How do you measure distance between two geometries?", "a": "Use geometryOne.distanceTo(geometryTwo)." },
+
+    { "q": "How do you union multiple feature classes?", "a": "Use arcpy.analysis.Union()." },
+    { "q": "How do you intersect feature classes?", "a": "Use arcpy.analysis.Intersect()." },
+    { "q": "What is Dissolve with multi-part option?", "a": "Creates multi-part features when dissolving based on shared attributes." },
+    { "q": "What is arcpy.Geometry.area?", "a": "Returns polygon area in coordinate system units." },
+    { "q": "What is arcpy.Geometry.length?", "a": "Returns polyline length in coordinate system units." },
+    { "q": "What is an extent object?", "a": "A rectangle defining XMin, XMax, YMin, YMax of a dataset." },
+    { "q": "How do you get dataset extent?", "a": "Use arcpy.Describe().extent." },
+    { "q": "What is arcpy.SelectLayerByAttribute?", "a": "Selects features based on SQL attribute queries." },
+    { "q": "What is arcpy.SelectLayerByLocation?", "a": "Selects features based on spatial relationships." },
+    { "q": "How do you clear selections?", "a": "Use arcpy.management.SelectLayerByAttribute('layer', 'CLEAR_SELECTION')." }
+],
+            "Python Programming": [
+  { "q": "What is Python?", "a": "Python is a high-level, interpreted programming language known for its readability, large standard library, and support for multiple paradigms including procedural, object-oriented, and functional programming." },
+
+  { "q": "What are Python's built-in data types?", "a": "Common built-in types include int, float, bool, str, list, tuple, dict, set, frozenset, bytes, bytearray, and NoneType." },
+
+  { "q": "What is the difference between a list and a tuple?", "a": "A list is mutable and allows modifications, whereas a tuple is immutable and typically used for fixed collections of items." },
+
+  { "q": "What is a dictionary in Python?", "a": "A dictionary is an unordered key-value mapping allowing efficient lookup, insertion, and deletion using hash-based indexing." },
+
+  { "q": "What is PEP 8?", "a": "PEP 8 is Python’s official style guide defining conventions for formatting code, naming, and overall readability." },
+
+  { "q": "What is the difference between == and is?", "a": "== checks value equality, while is checks object identity (same memory reference)." },
+
+  { "q": "What is a virtual environment?", "a": "A virtual environment isolates Python packages for a project, preventing dependency conflicts across projects." },
+
+  { "q": "What is pip?", "a": "pip is Python’s package manager used to install, update, and manage third-party libraries." },
+
+  { "q": "What is the use of the __init__ method?", "a": "__init__ initializes object attributes when a class instance is created, acting like a constructor." },
+
+  { "q": "What is a Python module?", "a": "A module is a file containing Python code—variables, functions, classes—that can be imported and reused." },
+
+  { "q": "What is a package in Python?", "a": "A package is a collection of modules organized in directories containing an __init__.py file." },
+
+  { "q": "Explain list comprehension.", "a": "List comprehension offers concise syntax to create lists using iteration and optional conditionals." },
+
+  { "q": "What is a lambda function?", "a": "A lambda is an anonymous, inline function defined with the lambda keyword, typically used for short operations." },
+
+  { "q": "Explain *args and **kwargs.", "a": "*args captures variable positional arguments while **kwargs captures variable keyword arguments." },
+
+  { "q": "What is a decorator?", "a": "A decorator wraps a function or method to modify its behavior without changing its code." },
+
+  { "q": "Explain generators.", "a": "Generators produce values lazily using the yield keyword, reducing memory usage for large sequences." },
+
+  { "q": "What is the yield keyword?", "a": "yield pauses a function and returns a value, preserving execution state for subsequent calls." },
+
+  { "q": "What is the difference between a generator and a list?", "a": "Generators compute values on demand, while lists store all values in memory at once." },
+
+  { "q": "What is a context manager?", "a": "A context manager controls setup and cleanup actions automatically, commonly implemented using with statements." },
+
+  { "q": "How do you create a custom context manager?", "a": "Use a class with __enter__ and __exit__, or use @contextmanager from contextlib." },
+
+  { "q": "Explain Python's garbage collection.", "a": "Python uses reference counting and a cyclic garbage collector to free unused memory." },
+
+  { "q": "What is the GIL?", "a": "The Global Interpreter Lock allows only one thread to execute Python bytecode at a time in CPython." },
+
+  { "q": "How do you achieve parallelism despite the GIL?", "a": "Use multiprocessing, native extensions, or async IO for concurrency rather than threading." },
+
+  { "q": "What is the difference between threading and multiprocessing?", "a": "Threading shares memory but is limited by the GIL; multiprocessing creates separate processes with independent memory." },
+
+  { "q": "What is async/await?", "a": "async/await enables asynchronous programming using coroutines for non-blocking IO operations." },
+
+  { "q": "What is a coroutine?", "a": "A coroutine is a function that can pause and resume its execution, enabling async concurrency." },
+
+  { "q": "What is duck typing?", "a": "Duck typing focuses on an object's behavior rather than its type; if it behaves like a duck, it’s accepted." },
+
+  { "q": "What is isinstance used for?", "a": "isinstance checks if an object belongs to a specific class or type hierarchy." },
+
+  { "q": "What is an iterator?", "a": "An iterator is an object implementing __iter__ and __next__ that yields items one at a time." },
+
+  { "q": "What is the difference between a shallow copy and a deep copy?", "a": "Shallow copy copies references for nested objects; deep copy recursively copies all objects." },
+
+  { "q": "How do you handle exceptions in Python?", "a": "Use try/except blocks and optionally finally; catch specific exceptions when possible." },
+
+  { "q": "What is the purpose of finally?", "a": "finally always executes, used for cleanup tasks like closing files or connections." },
+
+  { "q": "What is the difference between errors and exceptions?", "a": "Errors are serious problems hard to handle, whereas exceptions are runtime events that can be caught." },
+
+  { "q": "What is the use of pass?", "a": "pass acts as a placeholder when a statement is syntactically required but no action is needed." },
+
+  { "q": "What is a docstring?", "a": "A docstring is a literal string that documents modules, classes, methods, or functions." },
+
+  { "q": "How do you write unit tests in Python?", "a": "Use unittest or pytest frameworks to define test cases and assertions." },
+
+  { "q": "What is pytest?", "a": "pytest is a popular testing framework with easy syntax, fixtures, and plugin architecture." },
+
+  { "q": "What is the difference between import module and from module import func?", "a": "import module loads the full module; from module import func loads specific items into namespace." },
+
+  { "q": "What is monkey patching?", "a": "Monkey patching replaces or modifies attributes at runtime, often used in testing." },
+
+  { "q": "What is serialization?", "a": "Serialization converts data to a storable/transmittable format like JSON or pickle." },
+
+  { "q": "What is pickle?", "a": "pickle serializes Python objects into byte streams; not safe for untrusted data." },
+
+  { "q": "What is JSON used for?", "a": "JSON is a lightweight data format widely used for APIs and data exchange." },
+
+  { "q": "What is the difference between range and xrange?", "a": "In Python 3, only range exists (lazy). In Python 2, xrange was the lazy version." },
+
+  { "q": "What is enumerate used for?", "a": "enumerate returns index-value pairs while iterating through sequences." },
+
+  { "q": "What does zip do?", "a": "zip aggregates multiple iterables into tuples grouped by element position." },
+
+  { "q": "What is a metaclass?", "a": "A metaclass defines how classes behave; classes are instances of metaclasses." },
+
+  { "q": "What is __slots__?", "a": "__slots__ restricts attribute creation, reduces memory, and may improve performance." },
+
+  { "q": "What is the difference between a class method and a static method?", "a": "A class method receives the class (cls) as argument; a static method receives no implicit arguments." },
+
+  { "q": "What is multiple inheritance?", "a": "Multiple inheritance allows a class to inherit from multiple base classes simultaneously." },
+
+  { "q": "Explain MRO (Method Resolution Order).", "a": "MRO defines the order in which Python looks for methods in a class hierarchy, using the C3 linearization algorithm." },
+
+  { "q": "What is a namedtuple?", "a": "A namedtuple is an immutable tuple with named fields for better readability." },
+
+  { "q": "What is a dataclass?", "a": "dataclasses simplify creation of classes with automatic __init__, __repr__, and comparison methods." },
+
+  { "q": "What is type hinting?", "a": "Type hints annotate variable and function types to improve readability and static analysis." },
+
+  { "q": "What is mypy?", "a": "mypy is a static type checker for Python using type hints to detect type-related errors." },
+
+  { "q": "What is time complexity?", "a": "Time complexity measures how algorithm runtime grows with input size, commonly expressed in Big-O notation." },
+
+  { "q": "What is Big-O notation?", "a": "Big-O describes upper bounds on algorithm performance, e.g., O(n), O(log n), O(n^2)." },
+
+  { "q": "What is the difference between a set and a list?", "a": "A set is unordered and enforces uniqueness; list preserves order and allows duplicates." },
+
+  { "q": "How do you reverse a list?", "a": "Use list.reverse(), reversed(list), or slicing list[::-1]." },
+
+  { "q": "What does __str__ do?", "a": "__str__ defines the human-readable string representation of an object." },
+
+  { "q": "What does __repr__ do?", "a": "__repr__ defines the developer-oriented representation used for debugging." },
+
+  { "q": "How do you open and read a file?", "a": "Use with open('file.txt') as f: data = f.read(). The with statement auto-closes the file." },
+
+  { "q": "What is the difference between read, readline, and readlines?", "a": "read loads all content; readline reads one line; readlines returns a list of all lines." },
+
+  { "q": "How do you write to a file?", "a": "Open the file in write or append mode and call write() or writelines()." },
+
+  { "q": "What is an f-string?", "a": "f-strings allow inline variable interpolation using syntax like f\"Value: {x}\"." },
+
+  { "q": "What is the walrus operator := ?", "a": "It assigns and returns a value within expressions, introduced in Python 3.8." },
+
+  { "q": "What is recursion?", "a": "Recursion occurs when a function calls itself, typically used for hierarchical or divide-and-conquer algorithms." },
+
+  { "q": "What is memoization?", "a": "Memoization caches function results to avoid repeated computation, often implemented with functools.lru_cache." },
+
+  { "q": "What is functools.lru_cache?", "a": "A decorator that caches results of function calls, improving performance for expensive or repeated operations." },
+
+  { "q": "Explain shallow vs. deep equality.", "a": "Shallow equality checks values only at the top level; deep equality checks nested structures recursively." },
+
+  { "q": "What is an abstract base class (ABC)?", "a": "An ABC defines abstract methods that subclasses must implement, providing a template for class behavior." },
+
+  { "q": "What are Python descriptors?", "a": "Descriptors manage attribute access via __get__, __set__, and __delete__, powering properties and class behaviors." },
+
+  { "q": "What is property used for?", "a": "property creates managed attribute access with optional getters, setters, and deleters." },
+
+  { "q": "What are global and nonlocal keywords?", "a": "global modifies module-level variables; nonlocal modifies variables in enclosing (non-global) scopes." },
+
+  { "q": "What is the difference between a function and a method?", "a": "Functions are defined independently; methods are functions bound to a class or object." },
+
+  { "q": "What is module caching?", "a": "Python caches imported modules in sys.modules, preventing reloading unless forced." },
+
+  { "q": "What is the __main__ block?", "a": "Code under if __name__ == '__main__': executes only when the script runs directly." },
+
+  { "q": "What is bytecode?", "a": "Bytecode is Python’s intermediate representation executed by the interpreter’s virtual machine." },
+
+  { "q": "What is the difference between CPython, PyPy, and Jython?", "a": "CPython is the default interpreter; PyPy has a JIT compiler; Jython runs on the Java platform." },
+
+  { "q": "What is argparse?", "a": "argparse is a module for parsing command-line arguments and generating help messages." },
+
+  { "q": "What is logging used for?", "a": "The logging module records runtime information for debugging, monitoring, and diagnostics." },
+
+  { "q": "What are weak references?", "a": "Weak references allow referencing objects without increasing their reference count, preventing memory leaks." },
+
+  { "q": "What is asyncio?", "a": "asyncio is Python’s built-in framework for writing concurrent asynchronous applications using event loops." },
+
+  { "q": "What is a future?", "a": "A future represents a pending asynchronous result to be computed later." },
+
+  { "q": "What is a generator expression?", "a": "A generator expression is a compact generator created using syntax similar to list comprehension but in parentheses." },
+
+  { "q": "What is map() used for?", "a": "map applies a function to each element of an iterable, returning a lazy iterator." },
+
+  { "q": "What is filter() used for?", "a": "filter returns items from an iterable that satisfy a given predicate function." },
+
+  { "q": "What is reduce()?", "a": "reduce applies a rolling computation to sequential elements, often used for folding operations." },
+
+  { "q": "Explain the concept of immutability in Python.", "a": "Immutable types cannot be altered after creation, helping ensure safety and hashability." },
+
+  { "q": "Why are strings immutable?", "a": "Immutability makes strings hashable, enabling caching and safe usage as dictionary keys." },
+
+  { "q": "What is a memoryview?", "a": "memoryview provides a view of binary data without copying, improving efficiency for large byte arrays." },
+
+  { "q": "What is the difference between sys.argv and argparse?", "a": "sys.argv provides raw CLI arguments; argparse provides structured parsing with validation and help." },
+
+  { "q": "What is pdb?", "a": "pdb is Python’s built-in debugger for stepping through code, setting breakpoints, and inspecting state." },
+
+  { "q": "What are Python wheels?", "a": "Wheels are prebuilt binary package formats enabling faster installation than source distributions." },
+
+  { "q": "What is the difference between local, global, and built-in scopes?", "a": "Local scope belongs to function blocks; global scope belongs to module-level; built-in scope contains Python’s standard names." },
+
+  { "q": "What is LEGB rule?", "a": "LEGB describes name resolution order: Local, Enclosing, Global, Built-in." }
+]
+,
+            "SQL & Spatial SQL": [
+  { "q": "What is SQL?", "a": "SQL (Structured Query Language) is a language used to store, manipulate, and retrieve data in relational databases such as PostgreSQL, SQL Server, Oracle, and MySQL." },
+
+  { "q": "What is the difference between SQL and NoSQL?", "a": "SQL databases use structured schemas and tables, while NoSQL databases use flexible, schema-less formats such as document, key-value, or graph stores." },
+
+  { "q": "What is a primary key?", "a": "A primary key uniquely identifies each row in a table and does not allow duplicates or NULL values." },
+
+  { "q": "What is a foreign key?", "a": "A foreign key creates a relationship between two tables and ensures referential integrity between parent and child records." },
+
+  { "q": "What is a unique constraint?", "a": "A unique constraint enforces that values in a column or set of columns are distinct but allows NULL unless otherwise specified." },
+
+  { "q": "What is a composite key?", "a": "A composite key consists of two or more columns that together uniquely identify a row." },
+
+  { "q": "What is a candidate key?", "a": "A candidate key is any column or combination of columns that could serve as a primary key." },
+
+  { "q": "What is a surrogate key?", "a": "A surrogate key is an artificially generated identifier such as an auto-increment column used instead of natural keys." },
+
+  { "q": "What is normalization?", "a": "Normalization organizes tables to reduce redundancy and improve data integrity by splitting data into logically related tables." },
+
+  { "q": "What is denormalization?", "a": "Denormalization intentionally duplicates data to improve read or query performance, often used in analytics." },
+
+  { "q": "What is the First Normal Form (1NF)?", "a": "1NF requires eliminating repeating groups and ensuring all column values are atomic." },
+
+  { "q": "What is the Second Normal Form (2NF)?", "a": "2NF requires that all non-key attributes depend on the entire primary key, not just part of it." },
+
+  { "q": "What is the Third Normal Form (3NF)?", "a": "3NF ensures that non-key attributes depend only on the primary key and not on other non-key columns." },
+
+  { "q": "What is a JOIN?", "a": "A JOIN combines rows from multiple tables based on a related column." },
+
+  { "q": "Explain INNER JOIN.", "a": "INNER JOIN returns rows where matching values exist in both tables." },
+
+  { "q": "Explain LEFT JOIN.", "a": "LEFT JOIN returns all rows from the left table and matching rows from the right, with NULLs for missing matches." },
+
+  { "q": "Explain RIGHT JOIN.", "a": "RIGHT JOIN returns all rows from the right table and matching rows from the left, with NULLs for missing matches." },
+
+  { "q": "Explain FULL OUTER JOIN.", "a": "FULL OUTER JOIN returns rows when there is a match in one or both tables, filling NULLs where no match exists." },
+
+  { "q": "Explain CROSS JOIN.", "a": "CROSS JOIN returns the Cartesian product of two tables, producing all possible row combinations." },
+
+  { "q": "What is a self join?", "a": "A self join is a join where a table is joined to itself, often used for hierarchical relationships." },
+
+  { "q": "What is the GROUP BY clause?", "a": "GROUP BY aggregates rows that share a common value, allowing functions like COUNT, SUM, AVG to operate on groups." },
+
+  { "q": "What is the HAVING clause?", "a": "HAVING filters groups after aggregation, while WHERE filters rows before grouping." },
+
+  { "q": "What are aggregate functions?", "a": "Aggregate functions perform calculations on groups of rows, such as SUM, AVG, MIN, MAX, COUNT." },
+
+  { "q": "What is ORDER BY used for?", "a": "ORDER BY sorts query results in ascending or descending order." },
+
+  { "q": "What is DISTINCT used for?", "a": "DISTINCT removes duplicate rows from query results." },
+
+  { "q": "What is a subquery?", "a": "A subquery is a query nested inside another query, returning results used by the parent query." },
+
+  { "q": "What is a correlated subquery?", "a": "A correlated subquery depends on values from the outer query and is executed once per row of the outer query." },
+
+  { "q": "What is an index?", "a": "An index improves data retrieval speed by creating a lookup structure, at the cost of slower write operations." },
+
+  { "q": "What is a clustered index?", "a": "A clustered index physically stores table data in sorted order based on the index key." },
+
+  { "q": "What is a non-clustered index?", "a": "A non-clustered index stores a separate structure pointing to table data, similar to a book’s index." },
+
+  { "q": "What is a covering index?", "a": "A covering index contains all columns needed for a query, eliminating the need to access the base table." },
+
+  { "q": "What is index fragmentation?", "a": "Fragmentation occurs when data becomes scattered, reducing index efficiency and requiring maintenance." },
+
+  { "q": "What is the difference between DELETE and TRUNCATE?", "a": "DELETE removes rows one at a time and logs operations; TRUNCATE drops all rows instantly and resets storage." },
+
+  { "q": "What is the difference between DROP and TRUNCATE?", "a": "DROP removes the entire table or object; TRUNCATE clears only the data but keeps the structure." },
+
+  { "q": "What is a transaction?", "a": "A transaction is a sequence of operations executed as a single unit following ACID properties." },
+
+  { "q": "What are ACID properties?", "a": "ACID stands for Atomicity, Consistency, Isolation, Durability—ensuring reliable transactions." },
+
+  { "q": "What is COMMIT?", "a": "COMMIT permanently saves all changes made during the transaction." },
+
+  { "q": "What is ROLLBACK?", "a": "ROLLBACK reverts all changes made in the current transaction." },
+
+  { "q": "What is the purpose of SAVEPOINT?", "a": "SAVEPOINT creates intermediate transaction points to partially roll back operations." },
+
+  { "q": "What is isolation level?", "a": "Isolation levels define how transaction integrity is maintained and include READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, and SERIALIZABLE." },
+
+  { "q": "Explain dirty read.", "a": "A dirty read occurs when a transaction reads uncommitted changes from another transaction." },
+
+  { "q": "Explain phantom read.", "a": "A phantom read happens when rows appear or disappear during repeated queries due to another transaction inserting or deleting data." },
+
+  { "q": "Explain non-repeatable read.", "a": "A non-repeatable read occurs when the same row is returned differently because another transaction updated it." },
+
+  { "q": "What is a view?", "a": "A view is a virtual table defined by a query, used for abstraction, simplification, and security." },
+
+  { "q": "What is a materialized view?", "a": "A materialized view stores the query results physically for faster reading and requires manual or scheduled refresh." },
+
+  { "q": "What is a stored procedure?", "a": "A stored procedure is a precompiled SQL program stored in the database and executed on demand." },
+
+  { "q": "What is a function in SQL?", "a": "Functions return values and can be used inside expressions, unlike procedures which may not return values." },
+
+  { "q": "What is the difference between a stored procedure and a function?", "a": "Functions return values and cannot modify tables generally; procedures perform operations and may return multiple results." },
+
+  { "q": "What is a trigger?", "a": "A trigger automatically executes SQL code in response to events like INSERT, UPDATE, or DELETE." },
+
+  { "q": "What is referential integrity?", "a": "Referential integrity ensures that relationships between tables remain consistent through constraints like foreign keys." },
+
+  { "q": "What is a schema?", "a": "A schema is a logical container grouping related tables, views, procedures, and objects." },
+
+  { "q": "What is SQL injection?", "a": "SQL injection is a security attack where malicious input alters SQL queries; prevented using parameterized queries." },
+
+  { "q": "What is a window function?", "a": "Window functions perform calculations over a set of rows without collapsing them, using OVER()." },
+
+  { "q": "Explain ROW_NUMBER().", "a": "ROW_NUMBER assigns a unique sequential number to each row within a window partition." },
+
+  { "q": "Explain RANK().", "a": "RANK assigns ranking with gaps when ties occur, unlike ROW_NUMBER which always increments." },
+
+  { "q": "Explain DENSE_RANK().", "a": "DENSE_RANK behaves like RANK but without gaps in ranking for ties." },
+
+  { "q": "Explain PARTITION BY.", "a": "PARTITION BY divides rows into groups over which window functions operate independently." },
+
+  { "q": "What is COALESCE?", "a": "COALESCE returns the first non-NULL value from a list of expressions." },
+
+  { "q": "What is NULLIF?", "a": "NULLIF returns NULL if two expressions are equal, otherwise it returns the first expression." },
+
+  { "q": "Explain the IN operator.", "a": "IN filters rows based on whether values match any item in a list or subquery." },
+
+  { "q": "Explain the EXISTS operator.", "a": "EXISTS checks for the presence of rows returned by a subquery, often faster than IN for correlated subqueries." },
+
+  { "q": "What is the difference between IN and EXISTS?", "a": "IN compares values; EXISTS checks whether rows exist and stops at the first match." },
+
+  { "q": "Explain UNION vs UNION ALL.", "a": "UNION removes duplicates and sorts results; UNION ALL keeps duplicates and is faster." },
+
+  { "q": "Explain EXCEPT or MINUS.", "a": "EXCEPT (or MINUS in Oracle) returns rows from the first query not present in the second." },
+
+  { "q": "What is a CTE?", "a": "A Common Table Expression (CTE) is a temporary result set defined using WITH, improving query readability." },
+
+  { "q": "What is a recursive CTE?", "a": "A recursive CTE repeatedly executes itself to process hierarchical or sequential data." },
+
+  { "q": "What is query optimization?", "a": "Optimization improves SQL performance using indexes, statistics, execution plans, and better query design." },
+
+  { "q": "What is an execution plan?", "a": "An execution plan shows how a database will execute a query, exposing performance issues like table scans." },
+
+  { "q": "What is a table scan?", "a": "A table scan reads all rows in a table, often slow for large datasets if no useful index exists." },
+
+  { "q": "What is an index seek?", "a": "Index seek uses an index to efficiently locate matching rows, much faster than a scan." },
+
+  { "q": "What are database statistics?", "a": "Statistics store metadata about data distribution, helping the optimizer choose efficient execution plans." },
+
+  { "q": "What is ANALYZE or UPDATE STATISTICS?", "a": "Updating statistics refreshes metadata so query optimizers can make better decisions." },
+
+  { "q": "What is a deadlock?", "a": "A deadlock occurs when two transactions hold locks needed by each other, causing both to wait indefinitely." },
+
+  { "q": "What is a lock?", "a": "Locks prevent simultaneous conflicting writes or reads to ensure consistency during transactions." },
+
+  { "q": "Explain optimistic locking.", "a": "Optimistic locking assumes conflicts are rare and checks for changes only at commit time." },
+
+  { "q": "Explain pessimistic locking.", "a": "Pessimistic locking prevents conflicts by locking rows before modifying them." },
+
+  { "q": "What is a spatial index?", "a": "A spatial index accelerates queries involving geometry or geography data types, using structures like R-trees or quadtrees." },
+
+  { "q": "What is ST_Intersects?", "a": "ST_Intersects checks whether two spatial geometries overlap or touch." },
+
+  { "q": "What is ST_Buffer?", "a": "ST_Buffer creates an area around geometries at a specified distance." },
+
+  { "q": "What is ST_Distance?", "a": "ST_Distance returns the minimum distance between two geometries." },
+
+  { "q": "What is ST_Within?", "a": "ST_Within checks whether a geometry lies completely inside another geometry." },
+
+  { "q": "What is a geometry type?", "a": "A geometry type stores spatial objects such as points, lines, and polygons in planar coordinate systems." },
+
+  { "q": "What is a geography type?", "a": "Geography type stores spatial data using geodetic coordinates (lat/long) on the Earth’s surface." },
+
+  { "q": "What is partitioning in SQL?", "a": "Partitioning splits a large table into smaller segments for improved performance and manageability." },
+
+  { "q": "What is sharding?", "a": "Sharding distributes data across multiple servers or databases for scalability." },
+
+  { "q": "What is a temp table?", "a": "Temporary tables store intermediate results during query processing, deleted automatically after the session ends." },
+
+  { "q": "What is a pivot table in SQL?", "a": "PIVOT converts rows into columns for cross-tab style reporting." },
+
+  { "q": "What is dynamic SQL?", "a": "Dynamic SQL builds and executes SQL statements at runtime, useful for flexible queries." },
+
+  { "q": "What is the LIMIT or TOP clause?", "a": "LIMIT (or TOP) restricts the number of rows returned by a query." },
+
+  { "q": "What is a sequence?", "a": "A sequence generates sequential numeric values, often used for primary keys." },
+
+  { "q": "What is an auto-increment column?", "a": "An auto-increment column automatically assigns increasing values when new rows are inserted." }
+]
+
+        };
+
+        let currentCategory = 'all';
+        let allQA = [];
+        let currentTags = [];
+
+        function init() {
+            loadFromStorage();
+            buildQAList();
+            updateStats();
+            renderContent();
+        }
+
+        function buildQAList() {
+            allQA = [];
+            let num = 1;
+            Object.keys(qaData).forEach(cat => {
+                qaData[cat].forEach(item => {
+                    allQA.push({
+                        category: cat,
+                        q: item.q,
+                        a: item.a,
+                        tags: item.tags || [],
+                        number: num++
+                    });
+                });
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('totalQA').textContent = allQA.length;
+            const allTags = new Set();
+            allQA.forEach(item => item.tags.forEach(tag => allTags.add(tag)));
+            document.getElementById('totalTags').textContent = allTags.size;
+        }
+
+        function renderContent() {
+            const area = document.getElementById('contentArea');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = allQA;
+            
+            if (currentCategory !== 'all') {
+                const catMap = {
+                    'arcsde': 'ArcSDE & Enterprise Geodatabase',
+                    'arcpy': 'ArcPy Automation & Geoprocessing',
+                    'python': 'Python Programming',
+                    'sql': 'SQL & Spatial SQL'
+                };
+                filtered = allQA.filter(item => item.category === catMap[currentCategory]);
+            }
+            
+            if (search) {
+                filtered = filtered.filter(item => 
+                    item.q.toLowerCase().includes(search) || 
+                    item.a.toLowerCase().includes(search) ||
+                    item.tags.some(t => t.toLowerCase().includes(search))
+                );
+            }
+            
+            let html = '';
+            filtered.forEach((item, idx) => {
+                html += `<div class="qa-item">
+                    <div class="qa-header">
+                        <div class="question">
+                            <span class="q-number">Q${item.number}</span>
+                            <span>${item.q}</span>
+                        </div>
+                      
+                    </div>
+                    <div class="answer">${item.a}</div>
+                    ${item.tags.length > 0 ? `<div class="qa-tags">${item.tags.map(t => `<span class="qa-tag">${t}</span>`).join('')}</div>` : ''}
+                </div>`;
+            });
+            
+            area.innerHTML = html || '<div class="qa-item"><div class="answer">No results found.</div></div>';
+        }
+
+        function switchTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(name + 'Tab').classList.add('active');
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderContent();
+        }
+
+        function filterContent() {
+            renderContent();
+        }
+
+        function handleTagInput(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = e.target.value.trim();
+                if (val && !currentTags.includes(val)) {
+                    currentTags.push(val);
+                    renderTagInputs();
+                    e.target.value = '';
+                }
+            }
+        }
+
+        function renderTagInputs() {
+            const container = document.getElementById('tagContainer');
+            const input = document.getElementById('tagInput');
+            container.querySelectorAll('.tag').forEach(t => t.remove());
+            
+            currentTags.forEach((tag, i) => {
+                const tagEl = document.createElement('div');
+                tagEl.className = 'tag';
+                tagEl.innerHTML = `${tag} <span class="tag-remove" onclick="removeTag(${i})">×</span>`;
+                container.insertBefore(tagEl, input);
+            });
+        }
+
+        function removeTag(idx) {
+            currentTags.splice(idx, 1);
+            renderTagInputs();
+        }
+
+        function addQuestion(e) {
+            e.preventDefault();
+            const cat = document.getElementById('questionCategory').value;
+            const q = document.getElementById('questionText').value;
+            const a = document.getElementById('answerText').value;
+            
+            qaData[cat].push({ q, a, tags: [...currentTags] });
+            
+            buildQAList();
+            updateStats();
+            renderContent();
+            saveToStorage();
+            
+            document.getElementById('questionText').value = '';
+            document.getElementById('answerText').value = '';
+            document.getElementById('questionCategory').value = '';
+            currentTags = [];
+            renderTagInputs();
+            
+            const msg = document.getElementById('successMessage');
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+        }
+
+        function deleteQuestion(num) {
+            if (confirm('Delete this question?')) {
+                const item = allQA.find(qa => qa.number === num);
+                const catItems = qaData[item.category];
+                const idx = catItems.findIndex(i => i.q === item.q);
+                if (idx > -1) catItems.splice(idx, 1);
+                
+                buildQAList();
+                updateStats();
+                renderContent();
+                saveToStorage();
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('gisHandbookData', JSON.stringify(qaData));
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem('gisHandbookData');
+            if (saved) qaData = JSON.parse(saved);
+        }
+
+        function exportData() {
+            const data = JSON.stringify(qaData, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'gis_handbook_data.json';
+            a.click();
+        }
+
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                try {
+                    qaData = JSON.parse(ev.target.result);
+                    buildQAList();
+                    updateStats();
+                    renderContent();
+                    saveToStorage();
+                    alert('Data imported successfully!');
+                } catch (err) {
+                    alert('Invalid JSON file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Show/hide Go to Top button
+window.addEventListener('scroll', function() {
+    const goToTopBtn = document.querySelector('.go-to-top');
+    if (window.scrollY > 300) {
+        goToTopBtn.classList.add('visible');
+    } else {
+        goToTopBtn.classList.remove('visible');
+    }
+});
+
+// Scroll to top smoothly
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const margin = 20;
+            const maxWidth = pageWidth - (margin * 2);
+            let y = margin;
+            
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('GIS Master Handbook', pageWidth / 2, y, { align: 'center' });
+            y += 15;
+            
+            Object.keys(qaData).forEach(cat => {
+                if (y > pageHeight - 40) {
+                    doc.addPage();
+                    y = margin;
+                }
+                
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.setTextColor(102, 126, 234);
+                doc.text(cat, margin, y);
+                y += 10;
+                
+                doc.setTextColor(0, 0, 0);
+                
+                qaData[cat].forEach(item => {
+                    if (y > pageHeight - 60) {
+                        doc.addPage();
+                        y = margin;
+                    }
+                    
+                    const qa = allQA.find(q => q.q === item.q && q.category === cat);
+                    
+                    doc.setFontSize(11);
+                    doc.setFont(undefined, 'bold');
+                    const qText = `Q${qa.number}: ${item.q}`;
+                    const qLines = doc.splitTextToSize(qText, maxWidth);
+                    doc.text(qLines, margin, y);
+                    y += qLines.length * 6 + 2;
+                    
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(10);
+                    const aLines = doc.splitTextToSize(item.a, maxWidth - 5);
+                    doc.text(aLines, margin + 5, y);
+                    y += aLines.length * 5 + 10;
+                });
+            });
+            
+            doc.save('GIS_Handbook.pdf');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
