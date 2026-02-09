@@ -789,6 +789,7 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
                 <div class="category-filter">
                     <button class="category-btn active" onclick="filterCategory('all')">All</button>
                     <button class="category-btn" onclick="filterCategory('arcsde')">ArcSDE</button>
+                    <button class="category-btn" onclick="filterCategory('arcgisenterprise')">ArcGIS Enterprise</button>
                     <button class="category-btn" onclick="filterCategory('arcpy')">ArcPy</button>
                     <button class="category-btn" onclick="filterCategory('python')">Python</button>
                     <button class="category-btn" onclick="filterCategory('sql')">SQL</button>
@@ -807,6 +808,7 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
                             <select id="questionCategory" required>
                                 <option value="">Select category</option>
                                 <option value="ArcSDE & Enterprise Geodatabase">ArcSDE & Geodatabase</option>
+                                <option value="ArcGIS Enterprise">ArcGIS Enterprise</option>
                                 <option value="ArcPy Automation & Geoprocessing">ArcPy Automation</option>
                                 <option value="Python Programming">Python Programming</option>
                                 <option value="SQL & Spatial SQL">SQL & Spatial SQL</option>
@@ -946,8 +948,119 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
                 { q: "What are the symptoms of a poorly performing spatial index?", a: "Symptoms include slow spatial queries despite small result sets, queries ignoring indexes (visible in execution plans), or index size disproportionate to data size. Causes include outdated statistics, fragmented indexes, or inappropriate grid scale selection." },
                 { q: "What is the difference between attribute indexes and spatial indexes?", a: "Attribute indexes optimize searches on non-spatial columns using B-tree structures. Spatial indexes optimize geometric queries using specialized structures (R-tree). Both improve query performance but address different query types: WHERE clauses vs. spatial predicates." },
                 { q: "What are composite indexes?", a: "Composite indexes span multiple columns, optimizing queries filtering on those columns together. Example: index on (STATE, CITY) accelerates WHERE state='CA' AND city='Los Angeles'. Column order matters; leading column should be most selective or most frequently queried." }
-            ],
-            "ArcPy Automation & Geoprocessing": [
+                ],
+                "ArcGIS Enterprise": [
+            { q: "What is ArcGIS Enterprise?", a: "A self-hosted GIS platform for publishing, managing, and sharing geospatial services behind an organization’s firewall or cloud." },
+            { q: "What are the four core components of ArcGIS Enterprise?", a: "Portal for ArcGIS, ArcGIS Server, ArcGIS Data Store, and ArcGIS Web Adaptor." },
+            { q: "What role does Portal for ArcGIS play?", a: "It manages users, identities, content, sharing, and collaboration." },
+            { q: "What does ArcGIS Server do?", a: "It hosts and runs GIS services such as map, feature, image, and geoprocessing services." },
+            { q: "What is ArcGIS Data Store?", a: "A managed storage system used by hosted services in ArcGIS Enterprise." },
+            { q: "Is ArcGIS Enterprise the same as ArcGIS Server?", a: "No, ArcGIS Server is only one component of ArcGIS Enterprise." },
+            { q: "What is the Web Adaptor used for?", a: "It integrates ArcGIS Enterprise with a web server and provides friendly URLs and security." },
+            { q: "Can ArcGIS Enterprise run without the Web Adaptor?", a: "Yes, but it is not recommended for production environments." },
+            { q: "What is a base deployment?", a: "A minimal Enterprise deployment with one of each core component." },
+            { q: "What is a highly available deployment?", a: "A deployment designed with redundancy to eliminate single points of failure." },
+
+            { q: "What authentication methods does Portal support?", a: "Built-in users, LDAP/Active Directory, SAML, PKI, and OAuth." },
+            { q: "What is a named user?", a: "An authenticated user account with assigned privileges." },
+            { q: "What is a role in Portal?", a: "A set of privileges that define what actions a user can perform." },
+            { q: "What is the difference between default and custom roles?", a: "Default roles are fixed; custom roles allow granular privilege control." },
+            { q: "What are groups used for in Portal?", a: "Sharing content and enabling collaboration." },
+            { q: "What is federated authentication?", a: "Authentication handled by an external identity provider." },
+            { q: "What happens when ArcGIS Server is federated with Portal?", a: "Portal becomes the security authority for the server." },
+            { q: "Can ArcGIS Server exist without Portal?", a: "Yes, but it operates independently and lacks Enterprise capabilities." },
+            { q: "What is SAML commonly used for?", a: "Single sign-on in enterprise environments." },
+            { q: "What is an organization ID in Portal?", a: "A unique identifier for the Portal organization." },
+
+            { q: "What is a map service?", a: "A service that renders maps dynamically or as cached tiles." },
+            { q: "What is a feature service?", a: "A service that exposes vector features for querying and editing." },
+            { q: "What is a hosted feature layer?", a: "A feature layer whose data is stored in ArcGIS Data Store." },
+            { q: "What is a referenced feature service?", a: "A feature service that points to data in an external database." },
+            { q: "What is an image service?", a: "A service used to publish raster and imagery data." },
+            { q: "What is a geoprocessing service?", a: "A published spatial analysis tool that runs on the server." },
+            { q: "What is a utility service?", a: "A supporting service such as geometry, printing, or geocoding." },
+            { q: "What is service pooling?", a: "Sharing server processes among multiple services." },
+            { q: "What is a service instance?", a: "A running copy of a service handling client requests." },
+            { q: "What happens when all service instances are busy?", a: "Requests are queued or may fail depending on configuration." },
+
+            { q: "What types of ArcGIS Data Store exist?", a: "Relational, Tile Cache, Spatiotemporal, Graph, and Object Store." },
+            { q: "What is the relational data store used for?", a: "Storing hosted feature layers." },
+            { q: "What is the tile cache data store used for?", a: "Storing hosted tile and scene layer caches." },
+            { q: "What is the spatiotemporal data store used for?", a: "Storing big data and real-time feature layers." },
+            { q: "Can users directly edit the ArcGIS Data Store?", a: "No, it is managed exclusively by ArcGIS." },
+            { q: "Is ArcGIS Data Store a general-purpose database?", a: "No, it is purpose-built for hosted services." },
+            { q: "How is ArcGIS Data Store backed up?", a: "Using the backupdatastore utility." },
+            { q: "Can multiple data stores exist in one deployment?", a: "Yes." },
+            { q: "What happens if the relational data store fails?", a: "Hosted feature layers become unavailable." },
+            { q: "Is ArcGIS Data Store required for ArcGIS Enterprise?", a: "Only if hosted services are used." },
+
+            { q: "What does publishing mean in ArcGIS Enterprise?", a: "Making GIS data available as services." },
+            { q: "What is a service definition (.sd) file?", a: "A packaged configuration used to publish services." },
+            { q: "What is the difference between publish and overwrite?", a: "Publish creates a new service; overwrite updates an existing one." },
+            { q: "Can services be published directly from ArcGIS Pro?", a: "Yes." },
+            { q: "What is a registered data store?", a: "A database or folder registered with ArcGIS Server." },
+            { q: "Why register data stores?", a: "To avoid copying data during publishing." },
+            { q: "What is a managed database?", a: "A database controlled by ArcGIS Enterprise for hosted data." },
+            { q: "Can ArcGIS Enterprise use cloud databases?", a: "Yes, if they are supported by Esri." },
+            { q: "What is a scene layer?", a: "A cached 3D layer optimized for visualization." },
+            { q: "What is a tile layer?", a: "A pre-rendered map layer for fast display." },
+
+            { q: "What is horizontal scaling?", a: "Adding more machines to handle load." },
+            { q: "What is vertical scaling?", a: "Increasing CPU or RAM on existing machines." },
+            { q: "Which component most often bottlenecks performance?", a: "ArcGIS Server." },
+            { q: "Why use multiple ArcGIS Server sites?", a: "To separate and manage different workloads." },
+            { q: "What is a GIS Server site?", a: "A logical cluster of ArcGIS Server machines." },
+            { q: "What is the server directory?", a: "Storage for service outputs and caches." },
+            { q: "What is the config store?", a: "Central storage for ArcGIS Server configuration." },
+            { q: "Why place the config store on shared storage?", a: "To support high availability." },
+            { q: "What is load balancing?", a: "Distributing requests across multiple machines." },
+            { q: "What tool is used to monitor server health?", a: "ArcGIS Server Manager and logs." },
+
+            { q: "Where are ArcGIS Enterprise logs stored?", a: "In server and portal log directories." },
+            { q: "What log levels are available?", a: "Severe, Warning, Info, Debug, and Verbose." },
+            { q: "Which log level is recommended for production?", a: "Warning or Info." },
+            { q: "What does an HTTP 499 error usually indicate?", a: "The client closed the request." },
+            { q: "What commonly causes service timeouts?", a: "Long-running queries or insufficient instances." },
+            { q: "How do you diagnose publishing failures?", a: "By reviewing server and portal logs." },
+            { q: "What tool checks overall Enterprise health?", a: "ArcGIS Enterprise Health Check." },
+            { q: "What commonly causes login failures?", a: "Time synchronization or certificate issues." },
+            { q: "Why might services stop unexpectedly?", a: "Resource exhaustion or process crashes." },
+            { q: "What is the first step in troubleshooting?", a: "Review the logs." },
+
+            { q: "What license types exist for ArcGIS Server?", a: "GIS Server, Image Server, GeoAnalytics Server, and others." },
+            { q: "What is a user type?", a: "A bundle of capabilities assigned to users." },
+            { q: "What happens when an Enterprise license expires?", a: "Services stop functioning after a grace period." },
+            { q: "How is ArcGIS Enterprise licensed?", a: "Using authorization files." },
+            { q: "Can licenses be transferred to another machine?", a: "Yes, by deauthorizing first." },
+            { q: "What is ArcGIS License Manager?", a: "A tool for managing concurrent licenses." },
+            { q: "Is Portal required for user types?", a: "Yes." },
+            { q: "What is an Enterprise agreement?", a: "A subscription-based licensing model." },
+            { q: "Can ArcGIS Enterprise run in a disconnected environment?", a: "Yes, after initial setup." },
+            { q: "What is the most important prerequisite before upgrading?", a: "A full backup." },
+
+            { q: "Can ArcGIS Enterprise integrate with Python?", a: "Yes, using ArcPy and the ArcGIS API for Python." },
+            { q: "What is ArcGIS Notebook Server?", a: "A Jupyter-based environment for analysis and automation." },
+            { q: "What is GeoAnalytics Server?", a: "A distributed system for big spatial data analysis." },
+            { q: "What is ArcGIS Mission Server?", a: "A server for real-time situational awareness." },
+            { q: "What is ArcGIS Knowledge Server?", a: "A server for graph-based spatial relationships." },
+            { q: "Does ArcGIS Enterprise expose REST APIs?", a: "Yes, all services are REST-based." },
+            { q: "What is a web map?", a: "A JSON-based configuration of layers, symbology, and behavior." },
+            { q: "What is a web scene?", a: "A 3D equivalent of a web map." },
+            { q: "How does Enterprise support mobile applications?", a: "Through feature services and offline capabilities." },
+            { q: "What is offline editing?", a: "Editing data without an active network connection." },
+
+            { q: "Why separate Portal and Server machines?", a: "To reduce resource contention." },
+            { q: "Why limit administrative privileges?", a: "To follow the principle of least privilege." },
+            { q: "Why cache frequently used maps?", a: "To improve performance and scalability." },
+            { q: "Why monitor disk I/O closely?", a: "ArcGIS Enterprise is storage-intensive." },
+            { q: "Why avoid direct database edits on hosted data?", a: "They can corrupt the data store." },
+            { q: "Why automate backups?", a: "To reduce human error." },
+            { q: "Why test upgrades in a staging environment?", a: "To avoid breaking production systems." },
+            { q: "Why document services?", a: "To preserve institutional knowledge." },
+            { q: "Why use versioning for multiuser editing?", a: "To manage concurrent edits safely." },
+            { q: "What is the most common ArcGIS Enterprise mistake?", a: "Treating it like a single-user desktop GIS." }
+                ],
+                "ArcPy Automation & Geoprocessing": [
     { "q": "What is ArcPy?", "a": "ArcPy is Python's site package for ArcGIS that provides access to geoprocessing tools, spatial analysis functions, and geodatabase management. It enables automation of GIS workflows, batch processing, and custom tool development for ArcGIS Desktop and ArcGIS Pro." },
     { "q": "What is the difference between ArcPy and arcpy.mp?", "a": "ArcPy is the main module containing geoprocessing tools and functions. The arcpy.mp (ArcGIS Pro) or arcpy.mapping (ArcGIS Desktop) module specifically handles map document manipulation, layer management, and layout automation for cartographic workflows." },
     { "q": "What is arcpy.da and what does it provide?", "a": "arcpy.da (Data Access module) provides high-performance cursors for reading, writing, and updating feature data. It includes SearchCursor, InsertCursor, UpdateCursor, Editor context manager, and database management functions, offering better performance than older cursor methods." },
@@ -1468,6 +1581,7 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
             if (currentCategory !== 'all') {
                 const catMap = {
                     'arcsde': 'ArcSDE & Enterprise Geodatabase',
+                    'arcgisenterprise': 'ArcGIS Enterprise',
                     'arcpy': 'ArcPy Automation & Geoprocessing',
                     'python': 'Python Programming',
                     'sql': 'SQL & Spatial SQL'
