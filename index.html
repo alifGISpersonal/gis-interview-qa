@@ -790,6 +790,7 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
                     <button class="category-btn active" onclick="filterCategory('all')">All</button>
                     <button class="category-btn" onclick="filterCategory('arcsde')">ArcSDE</button>
                     <button class="category-btn" onclick="filterCategory('arcgisenterprise')">ArcGIS Enterprise</button>
+                    <button class="category-btn" onclick="filterCategory('arcgisjs')">ArcGIS JS</button>
                     <button class="category-btn" onclick="filterCategory('arcpy')">ArcPy</button>
                     <button class="category-btn" onclick="filterCategory('python')">Python</button>
                     <button class="category-btn" onclick="filterCategory('sql')">SQL</button>
@@ -809,6 +810,7 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
                                 <option value="">Select category</option>
                                 <option value="ArcSDE & Enterprise Geodatabase">ArcSDE & Geodatabase</option>
                                 <option value="ArcGIS Enterprise">ArcGIS Enterprise</option>
+                                <option value="ArcGIS JS">ArcGIS JS</option>
                                 <option value="ArcPy Automation & Geoprocessing">ArcPy Automation</option>
                                 <option value="Python Programming">Python Programming</option>
                                 <option value="SQL & Spatial SQL">SQL & Spatial SQL</option>
@@ -1059,6 +1061,92 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
             { q: "Why document services?", a: "To preserve institutional knowledge." },
             { q: "Why use versioning for multiuser editing?", a: "To manage concurrent edits safely." },
             { q: "What is the most common ArcGIS Enterprise mistake?", a: "Treating it like a single-user desktop GIS." }
+                ],
+                "ArcGIS JS": [
+  { q: "What is the ArcGIS JavaScript SDK?", a: "The ArcGIS JavaScript SDK is a client-side library for building web mapping and GIS applications using ArcGIS services and REST APIs." },
+  { q: "What is the primary purpose of the ArcGIS JS SDK?", a: "Its primary purpose is to display, query, analyze, and interact with geographic data in web browsers." },
+  { q: "Is the ArcGIS JS SDK client-side or server-side?", a: "It is a client-side SDK that runs in the browser." },
+  { q: "What programming language is used with the ArcGIS JS SDK?", a: "JavaScript and TypeScript." },
+  { q: "What is a Map in the ArcGIS JS SDK?", a: "A Map is a container for layers and basemaps that represents geographic data." },
+  { q: "What is a View in the ArcGIS JS SDK?", a: "A View is a visual representation of a Map, such as a MapView (2D) or SceneView (3D)." },
+  { q: "What is the difference between MapView and SceneView?", a: "MapView displays 2D maps, while SceneView displays 3D scenes." },
+  { q: "What is a basemap?", a: "A basemap provides geographic context, such as streets, imagery, or topography." },
+  { q: "What are layers in the ArcGIS JS SDK?", a: "Layers are data sources that display geographic information on a map." },
+  { q: "What is a FeatureLayer?", a: "A FeatureLayer displays vector features and supports querying, editing, and visualization." },
+
+  { q: "What is a MapImageLayer?", a: "A MapImageLayer displays map services rendered on the server." },
+  { q: "What is a TileLayer?", a: "A TileLayer displays cached map tiles for fast rendering." },
+  { q: "What is a SceneLayer?", a: "A SceneLayer displays cached 3D data such as buildings or point clouds." },
+  { q: "What is an ImageryLayer?", a: "An ImageryLayer displays raster or imagery services." },
+  { q: "What is a GraphicsLayer?", a: "A GraphicsLayer displays client-side graphics such as drawings or temporary features." },
+  { q: "What is a Graphic?", a: "A Graphic is a single geometry with attributes and symbology." },
+  { q: "What geometry types are supported?", a: "Point, Polyline, Polygon, and Multipoint." },
+  { q: "What is spatial reference?", a: "A spatial reference defines the coordinate system used to represent geographic data." },
+  { q: "What is Web Mercator?", a: "A common projected coordinate system used by most web maps." },
+  { q: "What is a renderer?", a: "A renderer defines how features are symbolized based on attributes or geometry." },
+
+  { q: "What is a SimpleRenderer?", a: "A renderer that applies the same symbol to all features." },
+  { q: "What is a UniqueValueRenderer?", a: "A renderer that assigns symbols based on unique attribute values." },
+  { q: "What is a ClassBreaksRenderer?", a: "A renderer that groups numeric values into ranges with different symbols." },
+  { q: "What is a symbol?", a: "A symbol defines how a feature is visually represented." },
+  { q: "What is a popup?", a: "A popup displays attribute information when a user interacts with a feature." },
+  { q: "What is popupTemplate?", a: "A configuration that defines popup content and formatting." },
+  { q: "What is hitTest?", a: "A method used to identify graphics or features at a screen location." },
+  { q: "What is a Query?", a: "A Query is used to retrieve features or attributes from a layer." },
+  { q: "What is queryFeatures?", a: "A method to request feature data from a FeatureLayer." },
+  { q: "What is definitionExpression?", a: "A SQL-based filter applied to a layer." },
+
+  { q: "What is client-side filtering?", a: "Filtering features in the browser after they are loaded." },
+  { q: "What is server-side filtering?", a: "Filtering features on the server before sending them to the client." },
+  { q: "What is the REST API?", a: "A web-based API that exposes ArcGIS services over HTTP." },
+  { q: "How does the JS SDK communicate with ArcGIS services?", a: "Through REST API requests." },
+  { q: "What is authentication in the JS SDK?", a: "The process of verifying a user's identity when accessing secured resources." },
+  { q: "What is OAuth?", a: "A token-based authentication mechanism used by ArcGIS." },
+  { q: "What is an access token?", a: "A temporary credential used to access secured services." },
+  { q: "What is IdentityManager?", a: "A class that manages authentication and credentials." },
+  { q: "What is a secured FeatureLayer?", a: "A layer that requires authentication to access." },
+
+  { q: "What is editing in the JS SDK?", a: "Creating, updating, or deleting features through a FeatureLayer." },
+  { q: "What is applyEdits?", a: "A method used to submit feature edits to the server." },
+  { q: "What is Editor widget?", a: "A UI widget that enables feature editing." },
+  { q: "What is Sketch widget?", a: "A widget for drawing and editing geometries on the map." },
+  { q: "What is snapping?", a: "A mechanism that aligns new geometries to existing features." },
+  { q: "What is measurement widget?", a: "A widget for measuring distance and area." },
+  { q: "What is Search widget?", a: "A widget that allows searching for places or features." },
+  { q: "What is LayerList widget?", a: "A widget that displays and controls map layers." },
+  { q: "What is Legend widget?", a: "A widget that explains map symbols." },
+  { q: "What is BasemapGallery?", a: "A widget for switching basemaps." },
+
+  { q: "What is a Widget in the ArcGIS JS SDK?", a: "A reusable UI component that adds functionality to a map." },
+  { q: "What is reactive programming in the SDK?", a: "Responding automatically to property changes using watchers." },
+  { q: "What is watchUtils?", a: "A utility for observing property changes." },
+  { q: "What is extent?", a: "The visible geographic area of a view." },
+  { q: "What is goTo?", a: "A method used to navigate the view to a location." },
+  { q: "What is scale?", a: "The ratio between map distance and real-world distance." },
+  { q: "What is LOD?", a: "Level of Detail used in tiled maps." },
+  { q: "What is performance optimization in the JS SDK?", a: "Techniques to improve rendering and responsiveness." },
+  { q: "What is feature reduction?", a: "A method for clustering or aggregating features at small scales." },
+
+  { q: "What is clustering?", a: "Grouping nearby point features into a single symbol." },
+  { q: "What is labeling?", a: "Displaying text labels for features." },
+  { q: "What is labelClass?", a: "Defines rules for labeling features." },
+  { q: "What is Arcade?", a: "A lightweight expression language used for labeling and symbology." },
+  { q: "Where is Arcade used in the JS SDK?", a: "In renderers, labels, and popups." },
+  { q: "What is time-enabled data?", a: "Data that includes time information for temporal visualization." },
+  { q: "What is TimeSlider widget?", a: "A widget for visualizing time-based data." },
+  { q: "What is a web map item?", a: "A stored map configuration in ArcGIS Portal or Online." },
+  { q: "How do you load a web map?", a: "By using the WebMap class with a portal item ID." },
+  { q: "What is a portal item?", a: "A piece of content stored in Portal or ArcGIS Online." },
+
+  { q: "What is SceneView performance impacted by?", a: "Hardware, data complexity, and number of 3D features." },
+  { q: "What is a 3D symbol?", a: "A symbol used to represent features in three dimensions." },
+  { q: "What is a mesh?", a: "A 3D surface composed of triangles." },
+  { q: "What is elevation data?", a: "Data representing terrain height." },
+  { q: "What is ground in SceneView?", a: "The surface representing the earth’s terrain." },
+  { q: "What is analysis in the JS SDK?", a: "Client-side spatial operations such as buffering or measuring." },
+  { q: "What are limitations of client-side analysis?", a: "Browser memory and performance constraints." },
+  { q: "When should server-side analysis be used?", a: "For large datasets or complex operations." },
+  { q: "What is the biggest mistake new JS SDK developers make?", a: "Trying to treat it like a desktop GIS instead of a web client." }
                 ],
                 "ArcPy Automation & Geoprocessing": [
     { "q": "What is ArcPy?", "a": "ArcPy is Python's site package for ArcGIS that provides access to geoprocessing tools, spatial analysis functions, and geodatabase management. It enables automation of GIS workflows, batch processing, and custom tool development for ArcGIS Desktop and ArcGIS Pro." },
@@ -1582,6 +1670,7 @@ background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, F
                 const catMap = {
                     'arcsde': 'ArcSDE & Enterprise Geodatabase',
                     'arcgisenterprise': 'ArcGIS Enterprise',
+                    'arcgisjs': 'ArcGIS JS',
                     'arcpy': 'ArcPy Automation & Geoprocessing',
                     'python': 'Python Programming',
                     'sql': 'SQL & Spatial SQL'
